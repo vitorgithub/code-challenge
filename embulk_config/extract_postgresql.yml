@@ -1,0 +1,17 @@
+in:
+  type: postgresql
+  host: db  # Nome do serviço Docker para o banco de dados
+  port: 5432
+  user: northwind_user
+  password: thewindisblowing  # Substitua pela senha real se 'thewindisblowing' não for a senha
+  database: northwind
+  table: sua_tabela
+  select: '*'
+out:
+  type: file
+  path_prefix: /workspace/data/postgres/sua_tabela/data_
+  sequence_format: '%03d.%t'  # Sequência de formatação para numerar os arquivos se houver mais de um arquivo
+  file_ext: csv
+  formatter:
+    type: csv
+    header_line: true

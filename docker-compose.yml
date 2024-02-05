@@ -12,3 +12,44 @@ services:
       - ./data/northwind.sql:/docker-entrypoint-initdb.d/northwind.sql
     ports:
       - 5432:5432
+
+  airflow-webserver:
+    image: apache/airflow:2.1.0
+    environment:
+      - AIRFLOW__CORE__EXECUTOR=LocalExecutor
+      - AIRFLOW__CORE__SQL_ALCHEMY_CONN=postgresql+psycopg2://northwind_user:thewindisblowing@db/northwind
+      - AIRFLOW__CORE__FERNET_KEY=gLr77nxH37jPSKoha60e0bZYiwPTbMXUHtt1MUfxJhw=
+      - AIRFLOW__CORE__LOAD_EXAMPLES=False
+      - AIRFLOW_HOME=/opt/airflow
+    volumes:
+      - ./dags:/opt/airflow/dags
+      - ./logs:/opt/airflow/logs
+      - ./plugins:/opt/airflow/plugins
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+    command: webserver
+
+  airflow-scheduler:
+    image: apache/airflow:2.1.0
+    environment:
+      - AIRFLOW__CORE__EXECUTOR=LocalExecutor
+      - AIRFLOW__CORE__SQL_ALCHEMY_CONN=postgresql+psycopg2://northwind_user:thewindisblowing@db/northwind
+      - AIRFLOW__CORE__FERNET_KEY=gLr77nxH37jPSKoha60e0bZYiwPTbMXUHtt1MUfxJhw=
+      - AIRFLOW__CORE__LOAD_EXAMPLES=False
+      - AIRFLOW_HOME=/opt/airflow
+    volumes:
+      - ./dags:/opt/airflow/dags
+      - ./logs:/opt/airflow/logs
+      - ./plugins:/opt/airflow/plugins
+    depends_on:
+      - db
+    command: scheduler
+
+  embulk:
+    build:
+      context: .
+      dockerfile: Dockerfile.embulk
+    volumes:
+      - ./embulk_config:/workspace

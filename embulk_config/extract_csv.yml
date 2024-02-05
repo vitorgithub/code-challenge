@@ -1,0 +1,15 @@
+in:
+  type: file
+  path_prefix: /workspace/data/csv/order_details
+  file_ext: csv
+  parser:
+    type: csv
+    skip_header_lines: 1
+out:
+  type: file
+  path_prefix: /workspace/data/csv/processed/order_details_
+  sequence_format: '%03d.%t'  # Sequência de formatação para numerar os arquivos se houver mais de um arquivo
+  file_ext: csv
+  formatter:
+    type: csv
+    header_line: true
