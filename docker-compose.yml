@@ -50,6 +50,7 @@ services:
   embulk:
     build:
       context: .
-      dockerfile: Dockerfile.embulk
+      dockerfile: .Dockerfile
     volumes:
       - ./embulk_config:/workspace
+    command: tail -f /dev/null

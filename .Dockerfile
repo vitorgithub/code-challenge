@@ -26,3 +26,6 @@ COPY ./plugins /opt/airflow/plugins
 
 # Definir o diretório de trabalho
 WORKDIR /opt/airflow
+
+# Define um comando padrão que mantém o contêiner em execução
+CMD ["tail", "-f", "/dev/null"]
